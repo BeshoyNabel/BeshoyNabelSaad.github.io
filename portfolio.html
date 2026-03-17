@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beshoy Nabel | Computer & Systems Engineer</title>
+    <style>
+        /* --- Core Variables & Engineering Theming --- */
+        :root {
+            /* Light Mode (Clean Tech) */
+            --bg-body: #f1f5f9;
+            --bg-nav: rgba(255, 255, 255, 0.9);
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --primary: #2563eb; /* Primary Tech Blue */
+            --primary-glow: rgba(37, 99, 235, 0.4);
+            --accent: #06b6d4; /* Cyan Accent */
+            --border-color: #e2e8f0;
+            --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode (Console/Cyberpunk) */
+            --bg-body: #020617; /* Very Dark Blue */
+            --bg-nav: rgba(15, 23, 42, 0.8);
+            --bg-card: #0f172a; /* Card Color */
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --primary: #3b82f6; /* Lighter Electric Blue */
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --border-color: #1e293b;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+        }
+
+        /* --- Global Reset & Scroll --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        html { scroll-behavior: smooth; font-size: 16px; }
+        body { background-color: var(--bg-body); color: var(--text-primary); transition: var(--transition); line-height: 1.6; overflow-x: hidden; }
+        
+        /* Monospace font for small engineering details */
+        .mono { font-family: 'Courier New', Courier, monospace; }
+
+        /* --- Animations --- */
+        @keyframes subtleGridPulse { 0% { opacity: 0.2; } 50% { opacity: 0.5; } 100% { opacity: 0.2; } }
+        @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 var(--primary-glow); } 70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); } }
+        @keyframes reveal { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Background Element (Subtle Circuit Grid) --- */
+        #bg-grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.2; }
+        [data-theme="dark"] #bg-grid { opacity: 0.05; }
+
+        /* --- Navigation --- */
+        nav { position: fixed; top: 0; width: 100%; z-index: 1000; background: var(--bg-nav); backdrop-filter: blur(10px); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); }
+        .logo { font-size: 1.3rem; font-weight: 800; letter-spacing: -1px; color: var(--text-primary); text-decoration: none; }
+        .logo span { color: var(--primary); }
+        .nav-links { display: flex; gap: 1.5rem; list-style: none; align-items: center; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: var(--transition); }
+        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links a.active { color: var(--primary); font-weight: 700; }
+        
+        /* Dark Mode Toggle (Professional Look) */
+        .theme-switch-wrapper { display: flex; align-items: center; gap: 0.5rem; }
+        .theme-switch { display: inline-block; height: 24px; position: relative; width: 48px; }
+        .theme-switch input { display:none; }
+        .slider { background-color: #cbd5e1; bottom: 0; cursor: pointer; left: 0; position: absolute; right: 0; top: 0; transition: .4s; border-radius: 34px; }
+        .slider:before { background-color: white; bottom: 4px; content: ""; height: 16px; left: 4px; position: absolute; transition: .4s; width: 16px; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        /* --- Hero Section (The Core Identity) --- */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 120px 5% 60px; position: relative; }
+        
+        /* The Unique Profile Container (Glowing Reactor Core Style) */
+        .profile-pic-container { position: relative; margin-bottom: 2rem; display: flex; justify-content: center; align-items: center; }
+        .profile-pulse-ring { position: absolute; width: 170px; height: 170px; border-radius: 50%; border: 2px solid var(--primary); animation: pulseGlow 2s infinite; z-index: -1; }
+        .profile-pic { width: 150px; height: 150px; border-radius: 50%; border: 4px solid var(--bg-card); object-fit: cover; box-shadow: var(--card-shadow); transition: var(--transition); z-index: 1; }
+        .profile-pic:hover { transform: scale(1.05); }
+
+        .hero-badge { color: var(--text-secondary); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        .hero-name { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; letter-spacing: -2px; line-height: 1.1; margin-bottom: 1rem; color: var(--text-primary); }
+        .hero-name span { color: var(--primary); }
+        .hero p { font-size: clamp(1.1rem, 2vw, 1.25rem); max-width: 650px; color: var(--text-secondary); margin: 0 auto 3rem; }
+        
+        .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+        
+        /* Base Button Style */
+        .btn { padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: var(--transition); display: inline-flex; align-items: center; gap: 0.5rem; }
+        
+        /* Filled Button (Contact) */
+        .btn-filled { background: var(--primary); color: white; border: 2px solid transparent; }
+        .btn-filled:hover { background: #1d4ed8; transform: translateY(-3px); }
+        
+        /* Outline Button (Download CV) */
+        .btn-outline { background: transparent; color: var(--primary); border: 2px solid var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+
+        /* --- Layout Sections --- */
+        section { padding: 100px 5%; max-width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(20px); }
+        section.revealed { animation: reveal 0.6s ease forwards; }
+        .section-header { margin-bottom: 4rem; text-align: center; }
+        .section-header h2 { font-size: 2.2rem; font-weight: 800; letter-spacing: -1px; display: inline-block; position: relative; padding-bottom: 10px; color: var(--text-primary); }
+        .section-header h2::after { content: ''; position: absolute; width: 60px; height: 4px; background: var(--primary); bottom: 0; left: 50%; transform: translateX(-50%); border-radius: 2px; }
+
+        /* --- About Section --- */
+        .about-grid { display: grid; grid-template-columns: 1fr; gap: 3rem; text-align: center; font-size: 1.1rem; color: var(--text-secondary); }
+        
+        /* --- Skills Section --- */
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .skill-category { background: var(--bg-card); border-radius: 12px; padding: 2rem; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); transition: var(--transition); }
+        .skill-category:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .skill-category h3 { font-size: 1.25rem; font-weight: 700; color: var(--primary); margin-bottom: 1.5rem; }
+        .skill-tags { display: flex; flex-wrap: wrap; gap: 0.8rem; }
+        .skill-tag { background: var(--bg-body); border: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem; font-weight: 500; padding: 0.5rem 1rem; border-radius: 50px; }
+
+        /* --- Projects Section (The Core of the Text-Only Design) --- */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .project-card { background: var(--bg-card); border-radius: 12px; padding: 2.5rem; border: 1px solid var(--border-color); box-shadow: var(--card-shadow); position: relative; overflow: hidden; display: flex; flex-direction: column; transition: var(--transition); }
+        .project-card:hover { border-color: transparent; transform: translateY(-8px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        [data-theme="dark"] .project-card:hover { box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.4); }
+
+        /* The dynamic border on hover */
+        .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border-radius: 12px; padding: 2px; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: var(--transition); }
+        .project-card:hover::before { opacity: 1; }
+
+        .project-details { position: relative; z-index: 1; flex-grow: 1; display: flex; flex-direction: column; }
+        .project-meta { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-secondary); margin-bottom: 0.5rem; font-weight: 600; }
+        .project-title { font-size: 1.4rem; font-weight: 800; color: var(--text-primary); margin-bottom: 1rem; letter-spacing: -0.5px; }
+        .project-desc { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 1.5rem; flex-grow: 1; }
+        .project-tech-stack { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color); }
+        .tech-tag { color: var(--primary); font-size: 0.8rem; font-weight: 700; background: rgba(37, 99, 235, 0.1); padding: 0.3rem 0.8rem; border-radius: 4px; }
+
+        /* --- Footer Section --- */
+        footer { padding: 60px 5%; background: var(--bg-card); border-top: 1px solid var(--border-color); text-align: center; }
+        .footer-logo { font-size: 1.2rem; font-weight: 800; color: var(--text-primary); margin-bottom: 1rem; text-decoration: none; display: inline-block; }
+        .footer-logo span { color: var(--primary); }
+        .social-links { display: flex; justify-content: center; gap: 1.5rem; list-style: none; margin-bottom: 2rem; }
+        .social-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: var(--transition); }
+        .social-links a:hover { color: var(--primary); }
+        .copyright { font-size: 0.85rem; color: #94a3b8; }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            html { font-size: 15px; }
+            nav { padding: 1rem 3%; }
+            .nav-links { gap: 1rem; }
+            .theme-switch-wrapper span { display: none; }
+            .hero { padding-top: 100px; }
+            .project-card { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <svg id="bg-grid" xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="currentColor" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(#grid)"/></svg>
+
+    <nav>
+        <a href="#home" class="logo">BESHOY <span>NABEL</span> SAAD</a>
+        <div class="nav-links-wrapper">
+            <ul class="nav-links">
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Systems</a></li>
+                <li class="theme-switch-wrapper">
+                    <span class="mono" style="color: var(--text-secondary); font-size: 0.8rem;">THEME:</span>
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider"></div>
+                    </label>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero revealed" id="home">
+            <div class="profile-pic-container">
+                <div class="profile-pulse-ring"></div>
+                <img src="D:\Pictures\WhatsApp Image 2025-02-08 at 14.08.33_615fca14.jpg" alt="Beshoy Nabel" class="profile-pic">
+            </div>
+            <p class="hero-badge mono">BSc. Computer Engineering</p>
+            <h1 class="hero-name">Systems <span>Engineer</span>. Software Architect.</h1>
+            <p>Passionate Computer Engineering student and ITI graduate specializing in the intersection of hardware logic, software engineering, Full-Stack Python systems, and AI security.</p>
+            
+            <div class="hero-btns">
+                <a href="#projects" class="btn btn-filled">View Systems</a>
+                <a href="D:/ME/CV_new.pdf" download class="btn btn-outline" id="cv-btn">Download CV</a>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="section-header">
+                <h2>Engineering Philosophy</h2>
+            </div>
+            <div class="about-grid">
+                <p>My academic foundation in Helwan Faculty of Engineering gives me a rigorous understanding of hardware architecture, digital systems, and control logic. Completing the intensive Full-Stack Python course at the Information Technology Institute (ITI) has solidified my capability to translate core engineering principles into robust, scalable, and modern software applications.</p>
+                <p class="mono" style="color: var(--primary); font-size: 1rem;">>>> print(engineering.bridge_hardware_and_software())</p>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="section-header">
+                <h2>Core Technical Stack</h2>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Software Engineering</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python (Django/Flask)</span>
+                        <span class="skill-tag">Full-Stack Development</span>
+                        <span class="skill-tag">C++ Programming</span>
+                        <span class="skill-tag">JavaScript / HTML / CSS</span>
+                        <span class="skill-tag">Database Architecture (SQL)</span>
+                        <span class="skill-tag">Software Lifecycle Design (SIS)</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Systems Engineering</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Parallel Programming (MPI)</span>
+                        <span class="skill-tag">Cybersecurity (XSS, Cryptography)</span>
+                        <span class="skill-tag">Artificial Intelligence Search</span>
+                        <span class="skill-tag">Hardware Analysis (Cadence)</span>
+                        <span class="skill-tag">Control Systems Logic</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="section-header">
+                <h2>Featured Engineering Projects</h2>
+            </div>
+            <div class="projects-grid">
+                
+                <article class="project-card">
+                    <div class="project-details">
+                        <div class="project-meta mono">GRADUATION PROJECT (IN PROGRESS)</div>
+                        <h3 class="project-title">AI-Powered Cybersecurity Platform</h3>
+                        <p class="project-desc">Co-developing an advanced platform that leverages machine learning models to analyze network patterns, detect zero-day vulnerabilities, and dynamically secure data infrastructure. Focus on integrating AI logic with network security layers.</p>
+                        <div class="project-tech-stack">
+                            <span class="tech-tag">Artificial Intelligence</span>
+                            <span class="tech-tag">Network Security</span>
+                            <span class="tech-tag">Systems Logic</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-details">
+                        <div class="project-meta mono">PARALLEL COMPUTING & ALGORITHMS</div>
+                        <h3 class="project-title">Parallel Pac-Man AI Agent</h3>
+                        <p class="project-desc">Implemented and optimized complex state-space search algorithms (BFS, A*). Explored parallel processing concepts to enhance performance of AI pathfinding agents, based on UC Berkeley's AI curriculum.</p>
+                        <div class="project-tech-stack">
+                            <span class="tech-tag">Search Algorithms</span>
+                            <span class="tech-tag">Python</span>
+                            <span class="tech-tag">Complexity Analysis</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-details">
+                        <div class="project-meta mono">ITI FULL-STACK PYTHON PROJECT</div>
+                        <h3 class="project-title">Restaurant Management System (RMS)</h3>
+                        <p class="project-desc">A complete backend architecture developed with Django to streamline restaurant operations. Features include secure inventory management, order processing pipelines, and user role authentication.</p>
+                        <div class="project-tech-stack">
+                            <span class="tech-tag">Django</span>
+                            <span class="tech-tag">MVC Architecture</span>
+                            <span class="tech-tag">Full-Stack Python</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="project-card">
+                    <div class="project-details">
+                        <div class="project-meta mono">HARDWARE & SOFTWARE SYNERGY</div>
+                        <h3 class="project-title">Student Information System (SIS)</h3>
+                        <p class="project-desc">Engineered a robust database schema and application logic using Software Engineering principles to securely manage large-scale academic data. Focus on data integrity, optimization, and access control models.</p>
+                        <div class="project-tech-stack">
+                            <span class="tech-tag">Software Design Patterns</span>
+                            <span class="tech-tag">Database Optimization</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <a href="#home" class="footer-logo">BESHOY <span>NABEL</span></a>
+        <ul class="social-links mono">
+            <li><a href="mailto:your.email@example.com">EMAIL</a></li>
+            <li><a href="https://linkedin.com/in/yourprofile">LINKEDIN</a></li>
+            <li><a href="https://github.com/yourusername">GITHUB</a></li>
+        </ul>
+        <p class="copyright">&copy; <span id="year"></span> Beshoy Nabel Saad. Computer Engineering Student & ITI Graduate.</p>
+    </footer>
+
+    <script>
+        // 1. Professional Dark Mode Switch (With Memory)
+        const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+        const currentTheme = localStorage.getItem('theme');
+
+        if (currentTheme) {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            if (currentTheme === 'dark') {
+                toggleSwitch.checked = true;
+            }
+        }
+
+        function switchTheme(e) {
+            if (e.target.checked) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        toggleSwitch.addEventListener('change', switchTheme, false);
+
+        // 2. Dynamic Copyright Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // 3. Scroll Reveal Animation (Native Intersection Observer)
+        const sections = document.querySelectorAll('section');
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -100px 0px" };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                    observer.unobserve(entry.target); // Animate once
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => { observer.observe(section); });
+
+        // 4. Unique CV Download Interaction (Subtle Glow on Hover)
+        const cvBtn = document.getElementById('cv-btn');
+        cvBtn.addEventListener('mouseover', () => {
+            document.querySelector('.profile-pic').style.boxShadow = "0 0 20px var(--primary-glow)";
+        });
+        cvBtn.addEventListener('mouseout', () => {
+            document.querySelector('.profile-pic').style.boxShadow = "var(--card-shadow)";
+        });
+    </script>
+</body>
+</html>
